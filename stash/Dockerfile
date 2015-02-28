@@ -26,6 +26,7 @@ ENV RUN_GROUP           daemon
 RUN apt-get update -qq                                                            \
     && apt-get install -y --no-install-recommends                                 \
             git                                                                   \
+            openssh-client                                                        \
             zip                                                                   \
     && apt-get clean autoclean                                                    \
     && apt-get autoremove --yes                                                   \

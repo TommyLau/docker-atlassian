@@ -50,6 +50,7 @@ RUN curl -L --silent                     ${DOWNLOAD_URL}${BAMBOO_VERSION}.tar.gz
     && zip -u9 atlassian-bundled-plugins.zip atlassian-universal-plugin-manager-plugin-2.16.2.jar \
     && rm -fr atlassian-universal-plugin-manager-plugin-2.16.2.jar                \
     && chown 500.1000 atlassian-bundled-plugins.zip                               \
+    && sed -i '1 i\#!\/usr\/bin\/env bash' ${BAMBOO_INSTALL_DIR}/bin/start-bamboo.sh \
     && echo "bamboo.home=${BAMBOO_HOME}" >> ${BAMBOO_INSTALL_DIR}/atlassian-bamboo/WEB-INF/classes/bamboo-init.properties
 
 USER ${RUN_USER}:${RUN_GROUP}

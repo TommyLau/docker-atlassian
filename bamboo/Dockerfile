@@ -1,4 +1,4 @@
-FROM java:openjdk-7-jre
+FROM java:openjdk-7-jdk
 
 MAINTAINER Tommy Lau <tommy@gen-new.com>
 
@@ -24,6 +24,8 @@ ENV RUN_GROUP           daemon
 # Try to limit the number of RUN instructions to minimise the number of layers that will need to be created.
 RUN apt-get update -qq                                                            \
     && apt-get install -y --no-install-recommends                                 \
+            git                                                                   \
+            openssh-client                                                        \
             zip                                                                   \
     && apt-get clean autoclean                                                    \
     && apt-get autoremove --yes                                                   \

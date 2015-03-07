@@ -1,4 +1,4 @@
-FROM java:openjdk-7-jre
+FROM java:openjdk-7-jdk
 
 MAINTAINER Tommy Lau <tommy@gen-new.com>
 

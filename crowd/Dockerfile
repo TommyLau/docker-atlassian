@@ -2,7 +2,7 @@ FROM java:openjdk-7-jdk
 
 MAINTAINER Tommy Lau <tommy@gen-new.com>
 
-ENV CROWD_VERSION 2.8.0
+ENV CROWD_VERSION 2.8.3
 
 ENV DOWNLOAD_URL        https://www.atlassian.com/software/crowd/downloads/binary/atlassian-crowd-
 

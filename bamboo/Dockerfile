@@ -20,7 +20,7 @@ RUN apt-get update -qq                                                          
 ENV RUN_USER            daemon
 ENV RUN_GROUP           daemon
 
-# Install Atlassian Stash to the following location
+# Install Atlassian Bamboo to the following location
 ENV BAMBOO_INSTALL_DIR   /opt/atlassian/bamboo
 
 ENV BAMBOO_VERSION 5.9.3

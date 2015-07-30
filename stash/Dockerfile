@@ -37,7 +37,7 @@ RUN mkdir -p                             ${STASH_INSTALL_DIR} \
     && chown -R ${RUN_USER}:${RUN_GROUP} ${STASH_INSTALL_DIR}/temp               \
     && chown -R ${RUN_USER}:${RUN_GROUP} ${STASH_INSTALL_DIR}/work               \
     && chown -R ${RUN_USER}:${RUN_GROUP} ${STASH_INSTALL_DIR}/conf               \
-    && cd /opt/atlassian/stash/atlassian-stash/WEB-INF/lib                       \
+    && cd ${STASH_INSTALL_DIR}/atlassian-stash/WEB-INF/lib                       \
     && curl -SLO "https://gist.github.com/TommyLau/8a5ce4629d027f7884e6/raw/18fb5f18b5cf7997a37169c0ba4f17e2e38c7c96/atlassian-extras-decoder-v2-3.2.jar" \
     && chown 500.1000 atlassian-extras-decoder-v2-3.2.jar                        \
     && cd ../classes/                                                            \

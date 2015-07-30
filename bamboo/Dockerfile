@@ -4,12 +4,12 @@ MAINTAINER Tommy Lau <tommy@gen-new.com>
 
 ENV DOWNLOAD_URL        https://www.atlassian.com/software/bamboo/downloads/binary/atlassian-bamboo-
 
-ENV BAMBOO_HOME          /var/atlassian/application-data/bamboo
+ENV BAMBOO_HOME         /var/atlassian/application-data/bamboo
 
 # Install git, download and extract Stash and create the required directory layout.
 # Try to limit the number of RUN instructions to minimise the number of layers that will need to be created.
 RUN apt-get update -qq                                                            \
-    && apt-get install -y --no-install-recommends git openssh-client zip \
+    && apt-get install -y --no-install-recommends git openssh-client zip          \
     && apt-get clean autoclean                                                    \
     && apt-get autoremove --yes                                                   \
     && rm -rf                  /var/lib/{apt,dpkg,cache,log}/

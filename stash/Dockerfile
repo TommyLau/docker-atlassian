@@ -24,7 +24,7 @@ ENV RUN_GROUP           daemon
 # Install Atlassian Stash to the following location
 ENV STASH_INSTALL_DIR   /opt/atlassian/stash
 
-ENV STASH_VERSION 3.11.1
+ENV STASH_VERSION 3.11.2
 
 RUN mkdir -p                             ${STASH_INSTALL_DIR} \
     && curl -L --silent                  ${DOWNLOAD_URL}${STASH_VERSION}.tar.gz | tar -xz --strip=1 -C "$STASH_INSTALL_DIR" \

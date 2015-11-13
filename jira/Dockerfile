@@ -27,7 +27,7 @@ ENV RUN_GROUP           daemon
 # Install Atlassian Stash to the following location
 ENV JIRA_INSTALL_DIR   /opt/atlassian/jira
 
-ENV JIRA_VERSION 6.4.9
+ENV JIRA_VERSION 6.4.12
 
 RUN mkdir -p                             ${JIRA_INSTALL_DIR} \
     && curl -L --silent                  ${DOWNLOAD_URL}${JIRA_VERSION}.tar.gz | tar -xz --strip=1 -C "$JIRA_INSTALL_DIR" \
@@ -44,8 +44,8 @@ RUN mkdir -p                             ${JIRA_INSTALL_DIR} \
     && curl -SLO "https://gist.github.com/TommyLau/8a5ce4629d027f7884e6/raw/86f02440dcb8ef36355b4ab7946831a385e1fe91/atlassian-extras-2.2.2.jar" \
     && chown 500.1000 atlassian-extras-2.2.2.jar                                \
     && cd ../atlassian-bundled-plugins/                                         \
-    && curl -SLO "https://gist.github.com/TommyLau/8a5ce4629d027f7884e6/raw/4d1a3fc95f7d6be947fe4a4b79f4105b817294fe/atlassian-universal-plugin-manager-plugin-2.18.4.jar" \
-    && chown 500.1000 atlassian-universal-plugin-manager-plugin-2.18.4.jar
+    && curl -SLO "https://gist.github.com/TommyLau/8a5ce4629d027f7884e6/raw/cf492caf58ccb1f69a49ae85e2f71dcd33761904/atlassian-universal-plugin-manager-plugin-2.19.1.jar" \
+    && chown 500.1000 atlassian-universal-plugin-manager-plugin-2.19.1.jar
 
 USER ${RUN_USER}:${RUN_GROUP}
 

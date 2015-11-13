@@ -27,7 +27,7 @@ ENV RUN_GROUP           daemon
 # Install Atlassian Stash to the following location
 ENV CONFLUENCE_INSTALL_DIR   /opt/atlassian/confluence
 
-ENV CONFLUENCE_VERSION 5.8.8
+ENV CONFLUENCE_VERSION 5.8.15
 
 RUN mkdir -p                             ${CONFLUENCE_INSTALL_DIR} \
     && curl -L --silent                  ${DOWNLOAD_URL}${CONFLUENCE_VERSION}.tar.gz | tar -xz --strip=1 -C "$CONFLUENCE_INSTALL_DIR" \

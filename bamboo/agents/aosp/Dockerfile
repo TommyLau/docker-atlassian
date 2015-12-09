@@ -24,17 +24,6 @@ RUN apt-get update && apt-get install -y software-properties-common --no-install
 		--no-install-recommends \
 	&& apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-# All builds will be done by user aosp
-#RUN useradd --create-home aosp
+# Use bash shell instead of dash
+RUN echo "dash dash/sh boolean false" | debconf-set-selections && DEBIAN_FRONTEND=noninteractive dpkg-reconfigure dash
 
-# The persistent data will be in these two directories, everything else is
-# considered to be ephemeral
-#VOLUME ["/tmp/ccache", "/aosp"]
-
-# Improve rebuild performance by enabling compiler cache
-#ENV USE_CCACHE 1
-#ENV CCACHE_DIR /tmp/ccache
-
-# Work in the build directory, repo is expected to be init'd here
-#USER aosp
-#WORKDIR /aosp

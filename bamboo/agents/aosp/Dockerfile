@@ -27,3 +27,5 @@ RUN apt-get update && apt-get install -y software-properties-common --no-install
 # Use bash shell instead of dash
 RUN echo "dash dash/sh boolean false" | debconf-set-selections && DEBIAN_FRONTEND=noninteractive dpkg-reconfigure dash
 
+ENV LANG C.UTF-8
+

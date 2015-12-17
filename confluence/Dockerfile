@@ -29,7 +29,7 @@ ENV CONFLUENCE_VERSION 5.9.2
 ENV DOWNLOAD_URL        https://downloads.atlassian.com/software/confluence/downloads/atlassian-confluence-${CONFLUENCE_VERSION}.tar.gz
 
 RUN mkdir -p                             ${CONFLUENCE_INSTALL_DIR} \
-    && curl -L --silent                  ${DOWNLOAD_URL}${CONFLUENCE_VERSION}.tar.gz | tar -xz --strip=1 -C "$CONFLUENCE_INSTALL_DIR" \
+    && curl -L --silent                  ${DOWNLOAD_URL} | tar -xz --strip=1 -C "$CONFLUENCE_INSTALL_DIR" \
     && mkdir -p                          ${CONFLUENCE_INSTALL_DIR}/conf/Catalina \
     && chmod -R 700                      ${CONFLUENCE_INSTALL_DIR}/conf/Catalina \
     && chmod -R 700                      ${CONFLUENCE_INSTALL_DIR}/logs          \

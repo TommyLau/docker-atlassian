@@ -5,14 +5,18 @@ MAINTAINER Tommy Lau <tommy@gen-new.com>
 # Download and extract Confluence and create the required directory layout.
 # Try to limit the number of RUN instructions to minimise the number of layers that will need to be created.
 RUN apt-get update -qq \
-    && apt-get install -y --no-install-recommends curl software-properties-common fonts-wqy-microhei fonts-wqy-zenhei fonts-arphic-uming \
+    && apt-get install -y --no-install-recommends curl software-properties-common \
+    && apt-get install -y --no-install-recommends fonts-dejavu fonts-wqy-* fonts-arphic-uming \
     && echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | debconf-set-selections \
     && apt-add-repository -y ppa:webupd8team/java \
     && apt-get update -qq \
     && apt-get install -y --no-install-recommends oracle-java8-installer \
     && apt-get clean autoclean \
     && apt-get autoremove --yes \
-    && rm -rf /var/lib/{apt,dpkg,cache,log}/
+    && rm -rf /var/lib/{apt,dpkg,cache,log}/ \
+    && cd /usr/lib/jvm/java-8-oracle/jre/lib \
+    && cp fontconfig.Ubuntu.properties fontconfig.properties \
+    && sed -i 's/ttf-dejavu/dejavu/g' fontconfig.properties
 
 # Use the default unprivileged account. This could be considered bad practice
 # on systems where multiple processes end up being executed by 'daemon' but

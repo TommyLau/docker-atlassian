@@ -21,7 +21,7 @@ ENV BAMBOO_HOME         /var/atlassian/application-data/bamboo
 # Install Atlassian Bamboo to the following location
 ENV BAMBOO_INSTALL_DIR   /opt/atlassian/bamboo
 
-ENV BAMBOO_VERSION 5.9.7
+ENV BAMBOO_VERSION 5.10.3
 ENV DOWNLOAD_URL        https://www.atlassian.com/software/bamboo/downloads/binary/atlassian-bamboo-${BAMBOO_VERSION}.tar.gz
 
 RUN mkdir -p                             ${BAMBOO_INSTALL_DIR} \
@@ -33,9 +33,9 @@ RUN mkdir -p                             ${BAMBOO_INSTALL_DIR} \
     && chmod -R 700                      ${BAMBOO_INSTALL_DIR}/work               \
     && chown -R ${RUN_USER}:${RUN_GROUP} ${BAMBOO_INSTALL_DIR}/                   \
     && cd ${BAMBOO_INSTALL_DIR}/atlassian-bamboo/WEB-INF/lib                      \
-    && curl -SLO "https://gist.github.com/TommyLau/8a5ce4629d027f7884e6/raw/18fb5f18b5cf7997a37169c0ba4f17e2e38c7c96/atlassian-extras-decoder-v2-3.2.jar" \
+    && curl -SLO "https://gist.github.com/TommyLau/8a5ce4629d027f7884e6/raw/9bc3df0e1134c0a290665bdbec041a847a903cef/atlassian-extras-decoder-v2-3.3.0.jar" \
     && cd ../atlassian-bundled-plugins/                                           \
-    && curl -SLO "https://gist.github.com/TommyLau/8a5ce4629d027f7884e6/raw/a382eb800b33d509a0ef4db9508956c8ea89fc96/atlassian-universal-plugin-manager-plugin-2.16.2.jar"
+    && curl -SLO "https://gist.github.com/TommyLau/8a5ce4629d027f7884e6/raw/3e6d810620448e15317d24db24bbd095a7bc188b/atlassian-universal-plugin-manager-plugin-2.19.4.jar"
 
 USER ${RUN_USER}:${RUN_GROUP}
 

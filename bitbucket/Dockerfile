@@ -22,7 +22,7 @@ ENV BITBUCKET_HOME          /var/atlassian/application-data/bitbucket
 # Install Atlassian Bitbucket Server to the following location
 ENV BITBUCKET_INSTALL_DIR   /opt/atlassian/bitbucket
 
-ENV BITBUCKET_VERSION 4.2.0
+ENV BITBUCKET_VERSION 4.4.1
 ENV DOWNLOAD_URL        https://downloads.atlassian.com/software/stash/downloads/atlassian-bitbucket-${BITBUCKET_VERSION}.tar.gz
 
 RUN mkdir -p                             ${BITBUCKET_INSTALL_DIR} \
@@ -38,9 +38,9 @@ RUN mkdir -p                             ${BITBUCKET_INSTALL_DIR} \
     && curl -SLO "https://gist.github.com/TommyLau/8a5ce4629d027f7884e6/raw/7ae5d32c6f77a39746597d46a511768e5a401b47/atlassian-extras-decoder-v2-3.3.0.jar" \
     && chown 500.500 atlassian-extras-decoder-v2-3.3.0.jar                           \
     && cd ../classes/                                                                \
-    && curl -SLO "https://gist.github.com/TommyLau/8a5ce4629d027f7884e6/raw/7ae5d32c6f77a39746597d46a511768e5a401b47/atlassian-universal-plugin-manager-plugin-2.20.1.jar" \
-    && zip -u9 bitbucket-bundled-plugins.zip atlassian-universal-plugin-manager-plugin-2.20.1.jar \
-    && rm -fr atlassian-universal-plugin-manager-plugin-2.20.1.jar \
+    && curl -SLO "https://gist.github.com/TommyLau/8a5ce4629d027f7884e6/raw/1199d1bf2c335d7328301774350bceca3aa1f73a/atlassian-universal-plugin-manager-plugin-2.20.4.jar" \
+    && zip -u9 bitbucket-bundled-plugins.zip atlassian-universal-plugin-manager-plugin-2.20.4.jar \
+    && rm -fr atlassian-universal-plugin-manager-plugin-2.20.4.jar \
     && chown 500.500 bitbucket-bundled-plugins.zip
 
 USER ${RUN_USER}:${RUN_GROUP}

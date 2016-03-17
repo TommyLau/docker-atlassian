@@ -25,7 +25,7 @@ ENV JIRA_HOME           /var/atlassian/application-data/jira
 # Install Atlassian JIRA to the following location
 ENV JIRA_INSTALL_DIR   /opt/atlassian/jira
 
-ENV JIRA_VERSION 7.0.5
+ENV JIRA_VERSION 7.1.2
 ENV DOWNLOAD_URL        https://downloads.atlassian.com/software/jira/downloads/atlassian-jira-software-${JIRA_VERSION}-jira-${JIRA_VERSION}.tar.gz
 
 RUN mkdir -p                             ${JIRA_INSTALL_DIR} \
@@ -40,8 +40,8 @@ RUN mkdir -p                             ${JIRA_INSTALL_DIR} \
     && curl -SLO "https://gist.github.com/TommyLau/8a5ce4629d027f7884e6/raw/ea2b58dcbf1ca18508a1b99d847c11f1ccb692a2/atlassian-extras-3.1.2.jar" \
     && chown 500.500 atlassian-extras-3.1.2.jar                                 \
     && cd ../atlassian-bundled-plugins/                                         \
-    && curl -SLO "https://gist.github.com/TommyLau/8a5ce4629d027f7884e6/raw/ea2b58dcbf1ca18508a1b99d847c11f1ccb692a2/atlassian-universal-plugin-manager-plugin-2.20.3.jar" \
-    && chown 500.500 atlassian-universal-plugin-manager-plugin-2.20.3.jar
+    && curl -SLO "https://gist.github.com/TommyLau/8a5ce4629d027f7884e6/raw/f9597f68f2d244022a12551660394088922c04d1/atlassian-universal-plugin-manager-plugin-2.20.6.jar" \
+    && chown 500.500 atlassian-universal-plugin-manager-plugin-2.20.6.jar
 
 USER ${RUN_USER}:${RUN_GROUP}
 

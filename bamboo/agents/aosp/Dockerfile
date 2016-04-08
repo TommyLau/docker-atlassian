@@ -5,6 +5,7 @@ MAINTAINER Tommy Lau <tommy@gen-new.com>
 # Install needed packages for building AOSP
 RUN apt-get update && apt-get install -y software-properties-common --no-install-recommends \
 	&& echo oracle-java6-installer shared/accepted-oracle-license-v1-1 select true | debconf-set-selections \
+	&& echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | debconf-set-selections \
 	&& apt-add-repository -y ppa:webupd8team/java \
 	&& apt-get update && apt-get install -y \
 		bison \
@@ -17,6 +18,7 @@ RUN apt-get update && apt-get install -y software-properties-common --no-install
 		lib32z1-dev \
 		libxml2-utils \
 		oracle-java6-installer \
+		oracle-java8-installer \
 		python-networkx \
 		ssh-client \
 		unzip \

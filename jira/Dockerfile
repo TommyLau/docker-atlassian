@@ -25,7 +25,7 @@ ENV JIRA_HOME           /var/atlassian/application-data/jira
 # Install Atlassian JIRA to the following location
 ENV JIRA_INSTALL_DIR   /opt/atlassian/jira
 
-ENV JIRA_VERSION 7.1.2
+ENV JIRA_VERSION 7.1.6
 ENV DOWNLOAD_URL        https://downloads.atlassian.com/software/jira/downloads/atlassian-jira-software-${JIRA_VERSION}-jira-${JIRA_VERSION}.tar.gz
 
 RUN mkdir -p                             ${JIRA_INSTALL_DIR} \

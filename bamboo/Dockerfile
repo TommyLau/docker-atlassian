@@ -21,7 +21,7 @@ ENV BAMBOO_HOME         /var/atlassian/application-data/bamboo
 # Install Atlassian Bamboo to the following location
 ENV BAMBOO_INSTALL_DIR   /opt/atlassian/bamboo
 
-ENV BAMBOO_VERSION 5.10.3
+ENV BAMBOO_VERSION 5.11.1
 ENV DOWNLOAD_URL        https://www.atlassian.com/software/bamboo/downloads/binary/atlassian-bamboo-${BAMBOO_VERSION}.tar.gz
 
 RUN mkdir -p                             ${BAMBOO_INSTALL_DIR} \

@@ -29,7 +29,7 @@ ENV CONFLUENCE_HOME     /var/atlassian/application-data/confluence
 # Install Atlassian Confluence to the following location
 ENV CONFLUENCE_INSTALL_DIR   /opt/atlassian/confluence
 
-ENV CONFLUENCE_VERSION 5.9.7
+ENV CONFLUENCE_VERSION 5.9.9
 ENV DOWNLOAD_URL        https://downloads.atlassian.com/software/confluence/downloads/atlassian-confluence-${CONFLUENCE_VERSION}.tar.gz
 
 RUN mkdir -p                             ${CONFLUENCE_INSTALL_DIR} \

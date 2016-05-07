@@ -1,8 +1,8 @@
-# Last update: 2016-03-17
+# Last update: 2016-05-07
 
-- Bamboo 5.10.3
-- Bitbucket 4.4.1
+- Bamboo 5.11.1
+- Bitbucket 4.4.2
+- Confluence 5.9.9
 - Crowd 2.8.4
-- Confluence 5.9.7
-- JIRA Software 7.1.2
+- JIRA Software 7.1.6
 - Stash (Oboslete)

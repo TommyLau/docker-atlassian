@@ -22,7 +22,7 @@ ENV BITBUCKET_HOME          /var/atlassian/application-data/bitbucket
 # Install Atlassian Bitbucket Server to the following location
 ENV BITBUCKET_INSTALL_DIR   /opt/atlassian/bitbucket
 
-ENV BITBUCKET_VERSION 4.4.1
+ENV BITBUCKET_VERSION 4.4.2
 ENV DOWNLOAD_URL        https://downloads.atlassian.com/software/stash/downloads/atlassian-bitbucket-${BITBUCKET_VERSION}.tar.gz
 
 RUN mkdir -p                             ${BITBUCKET_INSTALL_DIR} \

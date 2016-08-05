@@ -1,4 +1,4 @@
-FROM java:8-jdk-alpine
+FROM tommylau/java:1.8
 
 MAINTAINER Tommy Lau <tommy@gen-new.com>
 
@@ -13,41 +13,33 @@ ENV RUN_USER            daemon
 ENV RUN_GROUP           daemon
 
 # Install Atlassian Crowd to the following location
-ENV CROWD_INSTALL_DIR   /opt/atlassian/crowd
+ENV CROWD_INSTALL       /opt/atlassian/crowd
 
 ENV CROWD_VERSION 2.9.1
 
-RUN buildDeps=" \
-	curl \
-	tar \
-	"; \
-	set -x \
-    && apk add --update $buildDeps \
+RUN set -x \
     && mkdir -p                           "${CROWD_HOME}" \
     && chmod -R 700                       "${CROWD_HOME}" \
     && chown ${RUN_USER}:${RUN_GROUP}     "${CROWD_HOME}" \
-    && mkdir -p                           "${CROWD_INSTALL_DIR}" \
-    && curl -L --silent                   "${DOWNLOAD_URL}${CROWD_VERSION}.tar.gz" | tar -xz --strip=1 -C "$CROWD_INSTALL_DIR" \
-    && chmod -R 700                       "${CROWD_INSTALL_DIR}/apache-tomcat/logs"  \
-    && chmod -R 700                       "${CROWD_INSTALL_DIR}/apache-tomcat/temp"  \
-    && chmod -R 700                       "${CROWD_INSTALL_DIR}/apache-tomcat/work"  \
-    && chmod -R 700                       "${CROWD_INSTALL_DIR}/apache-tomcat/conf"  \
-    && cd ${CROWD_INSTALL_DIR}/crowd-webapp/WEB-INF/lib                           \
+    && mkdir -p                           "${CROWD_INSTALL}" \
+    && curl -L --silent                   "${DOWNLOAD_URL}${CROWD_VERSION}.tar.gz" | tar -xz --strip=1 -C "$CROWD_INSTALL" \
+    && chmod -R 700                       "${CROWD_INSTALL}/apache-tomcat/logs" \
+    && chmod -R 700                       "${CROWD_INSTALL}/apache-tomcat/temp" \
+    && chmod -R 700                       "${CROWD_INSTALL}/apache-tomcat/work" \
+    && chmod -R 700                       "${CROWD_INSTALL}/apache-tomcat/conf" \
+    && cd ${CROWD_INSTALL}/crowd-webapp/WEB-INF/lib \
     && curl -SLO "https://gist.github.com/TommyLau/8a5ce4629d027f7884e6/raw/2c5a9b2a26fa0da8b78938c5da1ad57dc05ea1b0/atlassian-extras-3.2.jar" \
-    && echo "crowd.home=${CROWD_HOME}" >> ${CROWD_INSTALL_DIR}/crowd-webapp/WEB-INF/classes/crowd-init.properties \
-    && sed -i 's/start/run/' ${CROWD_INSTALL_DIR}/apache-tomcat/bin/startup.sh \
-    && chown -R ${RUN_USER}:${RUN_GROUP} ${CROWD_INSTALL_DIR}                     \
-    && apk del $buildDeps \
-    && rm -rf /var/cache/apk/*
+    && chown -R ${RUN_USER}:${RUN_GROUP} ${CROWD_INSTALL} \
+    && echo "crowd.home=${CROWD_HOME}" >> ${CROWD_INSTALL}/crowd-webapp/WEB-INF/classes/crowd-init.properties
 
 USER ${RUN_USER}:${RUN_GROUP}
 
-VOLUME ["${CROWD_INSTALL_DIR}", "${CROWD_HOME}"]
+VOLUME ["${CROWD_INSTALL}", "${CROWD_HOME}"]
 
 # HTTP Port
 EXPOSE 8095
 
-WORKDIR $CROWD_INSTALL_DIR
+WORKDIR ${CROWD_INSTALL}
 
 # Run in foreground
-CMD ["./start_crowd.sh"]
+CMD ["./apache-tomcat/bin/catalina.sh", "run"]

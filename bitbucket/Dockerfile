@@ -23,6 +23,7 @@ RUN set -x \
     && apt-get clean autoclean \
     && apt-get autoremove --yes \
     && rm -rf /var/lib/{apt,dpkg,cache,log}/ \
+    && ln -s "/usr/lib/x86_64-linux-gnu/libtcnative-1.so" "${BITBUCKET_INSTALL}/lib/native/libtcnative-1.so"
     && mkdir -p                         "${BITBUCKET_HOME}" \
     && chmod -R 700                     "${BITBUCKET_HOME}" \
     && chown ${RUN_USER}:${RUN_GROUP}   "${BITBUCKET_HOME}" \

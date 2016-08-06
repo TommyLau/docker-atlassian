@@ -22,7 +22,7 @@ RUN set -x \
     && apt-get install -y --no-install-recommends git \
     && apt-get clean autoclean \
     && apt-get autoremove --yes \
-    && rm -rf /var/lib/{apt,dpkg,cache,log}/
+    && rm -rf /var/lib/{apt,dpkg,cache,log}/ \
     && mkdir -p                         "${BITBUCKET_HOME}" \
     && chmod -R 700                     "${BITBUCKET_HOME}" \
     && chown ${RUN_USER}:${RUN_GROUP}   "${BITBUCKET_HOME}" \

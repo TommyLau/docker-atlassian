@@ -18,6 +18,11 @@ ENV RUN_GROUP           daemon
 
 # Install Atlassian Bitbucket Server to the following location
 RUN set -x \
+    && apt-get update -qq \
+    && apt-get install -y --no-install-recommends git \
+    && apt-get clean autoclean \
+    && apt-get autoremove --yes \
+    && rm -rf /var/lib/{apt,dpkg,cache,log}/
     && mkdir -p                         "${BITBUCKET_HOME}" \
     && chmod -R 700                     "${BITBUCKET_HOME}" \
     && chown ${RUN_USER}:${RUN_GROUP}   "${BITBUCKET_HOME}" \

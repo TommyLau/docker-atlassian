@@ -33,7 +33,8 @@ RUN set -x \
     && cd ../atlassian-bundled-plugins/ \
     && curl -SLO "https://gist.github.com/TommyLau/8a5ce4629d027f7884e6/raw/f9597f68f2d244022a12551660394088922c04d1/atlassian-universal-plugin-manager-plugin-2.20.7.jar" \
     && chown -R ${RUN_USER}:${RUN_GROUP} ${CONFLUENCE_INSTALL} \
-    && echo "confluence.home=${CONFLUENCE_HOME}" > ${CONFLUENCE_INSTALL}/confluence/WEB-INF/classes/confluence-init.properties
+    && echo "confluence.home=${CONFLUENCE_HOME}" > ${CONFLUENCE_INSTALL}/confluence/WEB-INF/classes/confluence-init.properties \
+    && mv ${CONFLUENCE_INSTALL}/confluence/WEB-INF/lib/mail-*.jar ${CONFLUENCE_INSTALL}/lib
 
 # Use the default unprivileged account. This could be considered bad practice
 # on systems where multiple processes end up being executed by 'daemon' but

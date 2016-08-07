@@ -36,7 +36,9 @@ RUN set -x \
     && curl -SLO "https://gist.github.com/TommyLau/8a5ce4629d027f7884e6/raw/9bc3df0e1134c0a290665bdbec041a847a903cef/atlassian-extras-decoder-v2-3.3.0.jar" \
     && cd ../atlassian-bundled-plugins/ \
     && curl -SLO "https://gist.github.com/TommyLau/8a5ce4629d027f7884e6/raw/3e6d810620448e15317d24db24bbd095a7bc188b/atlassian-universal-plugin-manager-plugin-2.19.4.jar" \
-    && chown -R ${RUN_USER}:${RUN_GROUP} ${BAMBOO_INSTALL}
+    && chown -R ${RUN_USER}:${RUN_GROUP} ${BAMBOO_INSTALL} \
+    && echo "bamboo.home=${BAMBOO_HOME}" > ${BAMBOO_INSTALL}/atlassian-bamboo/WEB-INF/classes/bamboo-init.properties \
+    && mv ${BAMBOO_INSTALL}/atlassian-bamboo/WEB-INF/lib/javax.mail-*.jar ${BAMBOO_INSTALL}/lib
 
 # Use the default unprivileged account. This could be considered bad practice
 # on systems where multiple processes end up being executed by 'daemon' but

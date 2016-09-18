@@ -19,7 +19,7 @@ ENV RUN_GROUP           daemon
 # Install Atlassian Bamboo to the following location
 RUN set -x \
     && apt-get update -qq \
-    && apt-get install -y --no-install-recommends git \
+    && apt-get install -y --no-install-recommends git ssh-client \
     && apt-get clean autoclean \
     && apt-get autoremove --yes \
     && rm -rf /var/lib/{apt,dpkg,cache,log}/ \

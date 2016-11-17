@@ -26,7 +26,7 @@ ENV RUN_GROUP           daemon
 # directory structure.
 RUN set -x \
     && apt-get update -qq \
-    && apt-get install -y --no-install-recommends git unzip zip \
+    && apt-get install -y --no-install-recommends git ssh-client unzip zip \
     && mkdir -p                         "${FISHEYE_INST}" \
     && chmod -R 700                     "${FISHEYE_INST}" \
     && chown ${RUN_USER}:${RUN_GROUP}   "${FISHEYE_INST}" \

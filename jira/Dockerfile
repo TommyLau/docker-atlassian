@@ -5,7 +5,7 @@ MAINTAINER Tommy Lau <tommy@gen-new.com>
 # Setup useful environment variables
 ENV JIRA_HOME		/var/atlassian/application-data/jira
 ENV JIRA_INSTALL	/opt/atlassian/jira
-ENV JIRA_VERSION	7.1.9
+ENV JIRA_VERSION	7.1.10
 ENV DOWNLOAD_URL	https://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-software-${JIRA_VERSION}.tar.gz
 
 LABEL Description="This image is used to start Atlassian JIRA" Vendor="Tommy Lau" Version="${JIRA_VERSION}"

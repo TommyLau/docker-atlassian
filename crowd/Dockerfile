@@ -15,7 +15,7 @@ ENV RUN_GROUP           daemon
 # Install Atlassian Crowd to the following location
 ENV CROWD_INSTALL       /opt/atlassian/crowd
 
-ENV CROWD_VERSION 2.9.1
+ENV CROWD_VERSION 2.9.5
 
 RUN set -x \
     && mkdir -p                           "${CROWD_HOME}" \

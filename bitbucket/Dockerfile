@@ -5,7 +5,7 @@ MAINTAINER Tommy Lau <tommy@gen-new.com>
 # Setup useful environment variables
 ENV BITBUCKET_HOME      /var/atlassian/application-data/bitbucket
 ENV BITBUCKET_INSTALL   /opt/atlassian/bitbucket
-ENV BITBUCKET_VERSION   4.8.3
+ENV BITBUCKET_VERSION   4.11.2
 ENV DOWNLOAD_URL        https://downloads.atlassian.com/software/stash/downloads/atlassian-bitbucket-${BITBUCKET_VERSION}.tar.gz
 
 LABEL Description="This image is used to start Atlassian Bitbucket Server" Vendor="Tommy Lau" Version="${BITBUCKET_VERSION}"

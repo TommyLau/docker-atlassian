@@ -5,7 +5,7 @@ MAINTAINER Tommy Lau <tommy@gen-new.com>
 # Setup useful environment variables
 ENV JIRA_HOME		/var/atlassian/application-data/jira
 ENV JIRA_INSTALL	/opt/atlassian/jira
-ENV JIRA_VERSION	7.1.10
+ENV JIRA_VERSION	7.2.7
 ENV DOWNLOAD_URL	https://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-software-${JIRA_VERSION}.tar.gz
 
 LABEL Description="This image is used to start Atlassian JIRA" Vendor="Tommy Lau" Version="${JIRA_VERSION}"
@@ -31,7 +31,7 @@ RUN set -x \
     && cd ${JIRA_INSTALL}/atlassian-jira/WEB-INF/lib \
     && curl -SLO "https://gist.github.com/TommyLau/8a5ce4629d027f7884e6/raw/ea2b58dcbf1ca18508a1b99d847c11f1ccb692a2/atlassian-extras-3.1.2.jar" \
     && cd ../atlassian-bundled-plugins/                                         \
-    && curl -SLO "https://gist.github.com/TommyLau/8a5ce4629d027f7884e6/raw/f9597f68f2d244022a12551660394088922c04d1/atlassian-universal-plugin-manager-plugin-2.20.6.jar" \
+    && curl -SLO "https://gist.github.com/TommyLau/8a5ce4629d027f7884e6/raw/0cb48f928f125cb494a57d05ed9de0cba913d42a/atlassian-universal-plugin-manager-plugin-2.20.7.jar" \
     && chown -R ${RUN_USER}:${RUN_GROUP} ${JIRA_INSTALL}
 
 # Use the default unprivileged account. This could be considered bad practice
@@ -52,4 +52,3 @@ WORKDIR $JIRA_INSTALL
 
 # Run in foreground
 CMD ["./bin/start-jira.sh", "-fg"]
-

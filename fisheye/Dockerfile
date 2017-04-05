@@ -8,7 +8,7 @@ MAINTAINER Tommy Lau <tommy@gen-new.com>
 # FISHEYE_INST equals to FISHEYE_HOME compared to other Atlassian products.
 ENV FISHEYE_INST        /var/atlassian/application-data/fisheye
 ENV FISHEYE_INSTALL     /opt/atlassian/fisheye
-ENV FISHEYE_VERSION     4.2.1
+ENV FISHEYE_VERSION     4.3.1
 ENV DOWNLOAD_URL        https://www.atlassian.com/software/fisheye/downloads/binary/fisheye-${FISHEYE_VERSION}.zip
 
 LABEL Description="This image is used to start Atlassian FishEye" Vendor="Tommy Lau" Version="${FISHEYE_VERSION}"

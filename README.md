@@ -5,4 +5,4 @@
 - Confluence 6.1.1
 - Crowd 2.11.2
 - FishEye / Crucible 4.3.1
-- JIRA Software 7.2.7
+- JIRA Software 7.3.4

@@ -5,7 +5,7 @@ MAINTAINER Tommy Lau <tommy@gen-new.com>
 # Setup useful environment variables
 ENV CONFLUENCE_HOME     /var/atlassian/application-data/confluence
 ENV CONFLUENCE_INSTALL  /opt/atlassian/confluence
-ENV CONFLUENCE_VERSION  5.10.8
+ENV CONFLUENCE_VERSION  6.1.1
 ENV DOWNLOAD_URL        https://downloads.atlassian.com/software/confluence/downloads/atlassian-confluence-${CONFLUENCE_VERSION}.tar.gz
 
 LABEL Description="This image is used to start Atlassian Confluence" Vendor="Tommy Lau" Version="${CONFLUENCE_VERSION}"
@@ -31,7 +31,7 @@ RUN set -x \
     && cd ${CONFLUENCE_INSTALL}/confluence/WEB-INF/lib \
     && curl -SLO "https://gist.github.com/TommyLau/8a5ce4629d027f7884e6/raw/18fb5f18b5cf7997a37169c0ba4f17e2e38c7c96/atlassian-extras-decoder-v2-3.2.jar" \
     && cd ../atlassian-bundled-plugins/ \
-    && curl -SLO "https://gist.github.com/TommyLau/8a5ce4629d027f7884e6/raw/0cb48f928f125cb494a57d05ed9de0cba913d42a/atlassian-universal-plugin-manager-plugin-2.21.3.jar" \
+    && curl -SLO "https://gist.github.com/TommyLau/8a5ce4629d027f7884e6/raw/113a6eca7f68b00628b0f714bbfe8aa34f5f8ba3/atlassian-universal-plugin-manager-plugin-2.22.1.jar" \
     && chown -R ${RUN_USER}:${RUN_GROUP} ${CONFLUENCE_INSTALL} \
     && echo "confluence.home=${CONFLUENCE_HOME}" > ${CONFLUENCE_INSTALL}/confluence/WEB-INF/classes/confluence-init.properties \
     && mv ${CONFLUENCE_INSTALL}/confluence/WEB-INF/lib/mail-*.jar ${CONFLUENCE_INSTALL}/lib

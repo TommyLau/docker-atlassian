@@ -5,7 +5,7 @@ MAINTAINER Tommy Lau <tommy@gen-new.com>
 # Setup useful environment variables
 ENV BAMBOO_HOME         /var/atlassian/application-data/bamboo
 ENV BAMBOO_INSTALL	/opt/atlassian/bamboo
-ENV BAMBOO_VERSION	5.13.2
+ENV BAMBOO_VERSION	5.15.5
 ENV DOWNLOAD_URL        https://www.atlassian.com/software/bamboo/downloads/binary/atlassian-bamboo-${BAMBOO_VERSION}.tar.gz
 
 LABEL Description="This image is used to start Atlassian Bamboo" Vendor="Tommy Lau" Version="${BITBUCKET_VERSION}"
@@ -35,7 +35,7 @@ RUN set -x \
     && cd ${BAMBOO_INSTALL}/atlassian-bamboo/WEB-INF/lib \
     && curl -SLO "https://gist.github.com/TommyLau/8a5ce4629d027f7884e6/raw/9bc3df0e1134c0a290665bdbec041a847a903cef/atlassian-extras-decoder-v2-3.3.0.jar" \
     && cd ../atlassian-bundled-plugins/ \
-    && curl -SLO "https://gist.github.com/TommyLau/8a5ce4629d027f7884e6/raw/0cb48f928f125cb494a57d05ed9de0cba913d42a/atlassian-universal-plugin-manager-plugin-2.20.jar" \
+    && curl -SLO "https://gist.github.com/TommyLau/8a5ce4629d027f7884e6/raw/267b3e3c33e7c05b3079beaae4cc9248bf496291/atlassian-universal-plugin-manager-plugin-2.21.jar" \
     && chown -R ${RUN_USER}:${RUN_GROUP} ${BAMBOO_INSTALL} \
     && echo "bamboo.home=${BAMBOO_HOME}" > ${BAMBOO_INSTALL}/atlassian-bamboo/WEB-INF/classes/bamboo-init.properties \
     && mv ${BAMBOO_INSTALL}/atlassian-bamboo/WEB-INF/lib/javax.mail-*.jar ${BAMBOO_INSTALL}/lib
@@ -55,6 +55,7 @@ EXPOSE 54663
 # home directory needs to be persisted as well as parts of the installation
 # directory due to eg. logs.
 VOLUME ["${BAMBOO_INSTALL}", "${BAMBOO_HOME}"]
+
 # Set the default working directory as the Bamboo installation directory.
 WORKDIR ${BAMBOO_INSTALL}
 

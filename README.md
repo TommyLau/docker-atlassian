@@ -1,6 +1,6 @@
 # Last update: 2017-04-05
 
-- Bamboo 5.13.2
+- Bamboo 5.15.5
 - Bitbucket 4.11.2
 - Confluence 5.10.8
 - Crowd 2.11.2

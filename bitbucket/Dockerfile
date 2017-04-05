@@ -5,7 +5,7 @@ MAINTAINER Tommy Lau <tommy@gen-new.com>
 # Setup useful environment variables
 ENV BITBUCKET_HOME      /var/atlassian/application-data/bitbucket
 ENV BITBUCKET_INSTALL   /opt/atlassian/bitbucket
-ENV BITBUCKET_VERSION   4.11.2
+ENV BITBUCKET_VERSION   4.14.4
 ENV DOWNLOAD_URL        https://downloads.atlassian.com/software/stash/downloads/atlassian-bitbucket-${BITBUCKET_VERSION}.tar.gz
 
 LABEL Description="This image is used to start Atlassian Bitbucket Server" Vendor="Tommy Lau" Version="${BITBUCKET_VERSION}"
@@ -35,7 +35,7 @@ RUN set -x \
     && cd ${BITBUCKET_INSTALL}/atlassian-bitbucket/WEB-INF/lib \
     && curl -SLO "https://gist.github.com/TommyLau/8a5ce4629d027f7884e6/raw/7ae5d32c6f77a39746597d46a511768e5a401b47/atlassian-extras-decoder-v2-3.3.0.jar" \
     && cd ../atlassian-bundled-plugins/ \
-    && curl -SLO "https://gist.github.com/TommyLau/8a5ce4629d027f7884e6/raw/9217bf3a8ce8f1f04f105e606cf5c30e267b41a7/atlassian-universal-plugin-manager-plugin-2.21.3.jar" \
+    && curl -SLO "https://gist.github.com/TommyLau/8a5ce4629d027f7884e6/raw/113a6eca7f68b00628b0f714bbfe8aa34f5f8ba3/atlassian-universal-plugin-manager-plugin-2.22.1.jar" \
     && chown -R ${RUN_USER}:${RUN_GROUP} ${BITBUCKET_INSTALL} \
     && ln -s "/usr/lib/x86_64-linux-gnu/libtcnative-1.so" "${BITBUCKET_INSTALL}/lib/native/libtcnative-1.so"
 
@@ -55,7 +55,7 @@ EXPOSE 7999
 # directory due to eg. logs.
 VOLUME ["${BITBUCKET_INSTALL}", "${BITBUCKET_HOME}"]
 
-# Set the default working directory as the Confluence installation directory.
+# Set the default working directory as the Bitbucket installation directory.
 WORKDIR ${BITBUCKET_INSTALL}
 
 # Run in foreground

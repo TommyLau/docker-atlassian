@@ -2,9 +2,13 @@ FROM tommylau/java:1.8
 
 MAINTAINER Tommy Lau <tommy@gen-new.com>
 
-ENV DOWNLOAD_URL        https://www.atlassian.com/software/crowd/downloads/binary/atlassian-crowd-
+# Setup useful environment variables
+ENV CROWD_HOME		/var/atlassian/application-data/crowd
+ENV CROWD_INSTALL	/opt/atlassian/crowd
+ENV CROWD_VERSION	2.11.2
+ENV DOWNLOAD_URL	https://www.atlassian.com/software/crowd/downloads/binary/atlassian-crowd-${CROWD_VERSION}.tar.gz
 
-ENV CROWD_HOME          /var/atlassian/application-data/crowd
+LABEL Description="This image is used to start Atlassian Crowd" Vendor="Tommy Lau" Version="${BITBUCKET_VERSION}"
 
 # Use the default unprivileged account. This could be considered bad practice
 # on systems where multiple processes end up being executed by 'daemon' but
@@ -13,16 +17,12 @@ ENV RUN_USER            daemon
 ENV RUN_GROUP           daemon
 
 # Install Atlassian Crowd to the following location
-ENV CROWD_INSTALL       /opt/atlassian/crowd
-
-ENV CROWD_VERSION 2.9.5
-
 RUN set -x \
     && mkdir -p                           "${CROWD_HOME}" \
     && chmod -R 700                       "${CROWD_HOME}" \
     && chown ${RUN_USER}:${RUN_GROUP}     "${CROWD_HOME}" \
     && mkdir -p                           "${CROWD_INSTALL}" \
-    && curl -L --silent                   "${DOWNLOAD_URL}${CROWD_VERSION}.tar.gz" | tar -xz --strip=1 -C "$CROWD_INSTALL" \
+    && curl -L --silent                   "${DOWNLOAD_URL}" | tar -xz --strip=1 -C "$CROWD_INSTALL" \
     && chmod -R 700                       "${CROWD_INSTALL}/apache-tomcat/logs" \
     && chmod -R 700                       "${CROWD_INSTALL}/apache-tomcat/temp" \
     && chmod -R 700                       "${CROWD_INSTALL}/apache-tomcat/work" \
@@ -39,6 +39,12 @@ VOLUME ["${CROWD_INSTALL}", "${CROWD_HOME}"]
 # HTTP Port
 EXPOSE 8095
 
+# Set volume mount points for installation and home directory. Changes to the
+# home directory needs to be persisted as well as parts of the installation
+# directory due to eg. logs.
+VOLUME ["${CROWD_INSTALL}", "${CROWD_HOME}"]
+
+# Set the default working directory as the Crowd installation directory.
 WORKDIR ${CROWD_INSTALL}
 
 # Run in foreground

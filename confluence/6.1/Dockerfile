@@ -5,7 +5,7 @@ MAINTAINER Tommy Lau <tommy@gen-new.com>
 # Setup useful environment variables
 ENV CONFLUENCE_HOME     /var/atlassian/application-data/confluence
 ENV CONFLUENCE_INSTALL  /opt/atlassian/confluence
-ENV CONFLUENCE_VERSION  6.7.0
+ENV CONFLUENCE_VERSION  6.1.1
 ENV DOWNLOAD_URL        https://downloads.atlassian.com/software/confluence/downloads/atlassian-confluence-${CONFLUENCE_VERSION}.tar.gz
 
 LABEL Description="This image is used to start Atlassian Confluence" Vendor="Tommy Lau" Version="${CONFLUENCE_VERSION}"
@@ -29,9 +29,9 @@ RUN set -x \
     && chmod -R 700                     "${CONFLUENCE_INSTALL}/temp" \
     && chmod -R 700                     "${CONFLUENCE_INSTALL}/work" \
     && cd ${CONFLUENCE_INSTALL}/confluence/WEB-INF/lib \
-    && curl -SLO "https://gist.github.com/TommyLau/8a5ce4629d027f7884e6/raw/594ea78164b2ed0ce20043062245d65510a68060/atlassian-extras-decoder-v2-3.3.0.jar" \
+    && curl -SLO "https://gist.github.com/TommyLau/8a5ce4629d027f7884e6/raw/18fb5f18b5cf7997a37169c0ba4f17e2e38c7c96/atlassian-extras-decoder-v2-3.2.jar" \
     && cd ../atlassian-bundled-plugins/ \
-    && curl -SLO "https://gist.github.com/TommyLau/8a5ce4629d027f7884e6/raw/b1d122064c76cdad58751ac449d0a7899e4433fe/atlassian-universal-plugin-manager-plugin-2.22.5.jar" \
+    && curl -SLO "https://gist.github.com/TommyLau/8a5ce4629d027f7884e6/raw/113a6eca7f68b00628b0f714bbfe8aa34f5f8ba3/atlassian-universal-plugin-manager-plugin-2.22.1.jar" \
     && chown -R ${RUN_USER}:${RUN_GROUP} ${CONFLUENCE_INSTALL} \
     && echo "confluence.home=${CONFLUENCE_HOME}" > ${CONFLUENCE_INSTALL}/confluence/WEB-INF/classes/confluence-init.properties \
     && mv ${CONFLUENCE_INSTALL}/confluence/WEB-INF/lib/mail-*.jar ${CONFLUENCE_INSTALL}/lib

@@ -5,7 +5,7 @@ MAINTAINER Tommy Lau <tommy@gen-new.com>
 # Setup useful environment variables
 ENV CONFLUENCE_HOME     /var/atlassian/application-data/confluence
 ENV CONFLUENCE_INSTALL  /opt/atlassian/confluence
-ENV CONFLUENCE_VERSION  6.8.0
+ENV CONFLUENCE_VERSION  6.7.0
 ENV DOWNLOAD_URL        https://downloads.atlassian.com/software/confluence/downloads/atlassian-confluence-${CONFLUENCE_VERSION}.tar.gz
 
 LABEL Description="This image is used to start Atlassian Confluence" Vendor="Tommy Lau" Version="${CONFLUENCE_VERSION}"

@@ -1,4 +1,4 @@
-FROM tommylau/java:1.8
+FROM openjdk:8-jdk-alpine
 
 MAINTAINER Tommy Lau <tommy@gen-new.com>
 
@@ -18,6 +18,8 @@ ENV RUN_GROUP           daemon
 
 # Install Atlassian Crowd to the following location
 RUN set -x \
+    && apk add --update ca-certificates curl tar tomcat-native \
+    && rm -rf /var/lib/{apt,dpkg,cache,log}/ /tmp/* /var/tmp/* \
     && mkdir -p                           "${CROWD_HOME}" \
     && chmod -R 700                       "${CROWD_HOME}" \
     && chown ${RUN_USER}:${RUN_GROUP}     "${CROWD_HOME}" \

@@ -1,8 +1,32 @@
-# Last update: 2018-03-27
+# Atlassian Docker Images
 
-- Bamboo 6.4.1
-- Bitbucket 5.9.0
-- Confluence 6.8.0
-- Crowd 3.1.2
-- FishEye / Crucible 4.3.1
-- JIRA Software 7.8.0
+## Bamboo
+
+Version: 6.4.1
+Java: Oracle JDK 1.8
+
+## Bitbucket
+
+Version: 5.9.0
+Java: Oracle JDK 1.8
+
+## Confluence
+
+Version: 6.8.0
+Java: Oracle JDK 1.8
+
+## Crowd
+
+Version: 3.1.2
+Java: OpenJDK 8 (Alpine)
+Update: 2018-03-27
+
+## FishEye / Crucible
+
+Version: 4.3.1
+Java: Oracle JDK 1.8
+
+## JIRA Software
+
+Version: 7.8.0
+Java: Oracle JDK 1.8

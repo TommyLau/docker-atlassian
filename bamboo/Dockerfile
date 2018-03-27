@@ -1,14 +1,14 @@
-FROM tommylau/java:1.8
+FROM openjdk:8-jdk-alpine
 
 MAINTAINER Tommy Lau <tommy@gen-new.com>
 
 # Setup useful environment variables
 ENV BAMBOO_HOME         /var/atlassian/application-data/bamboo
-ENV BAMBOO_INSTALL	/opt/atlassian/bamboo
-ENV BAMBOO_VERSION	6.4.1
+ENV BAMBOO_INSTALL      /opt/atlassian/bamboo
+ENV BAMBOO_VERSION      6.4.1
 ENV DOWNLOAD_URL        https://www.atlassian.com/software/bamboo/downloads/binary/atlassian-bamboo-${BAMBOO_VERSION}.tar.gz
 
-LABEL Description="This image is used to start Atlassian Bamboo" Vendor="Tommy Lau" Version="${BITBUCKET_VERSION}"
+LABEL Description="This image is used to start Atlassian Bamboo" Vendor="Tommy Lau" Version="${BAMBOO_VERSION}"
 
 # Use the default unprivileged account. This could be considered bad practice
 # on systems where multiple processes end up being executed by 'daemon' but
@@ -18,11 +18,8 @@ ENV RUN_GROUP           daemon
 
 # Install Atlassian Bamboo to the following location
 RUN set -x \
-    && apt-get update -qq \
-    && apt-get install -y --no-install-recommends git ssh-client \
-    && apt-get clean autoclean \
-    && apt-get autoremove --yes \
-    && rm -rf /var/lib/{apt,dpkg,cache,log}/ \
+    && apk add --update ca-certificates bash curl git git-daemon openssh openssl procps perl tar tini tomcat-native ttf-dejavu \
+    && rm -rf /var/lib/{apt,dpkg,cache,log}/ /tmp/* /var/tmp/* \
     && mkdir -p                         "${BAMBOO_HOME}" \
     && chmod -R 700                     "${BAMBOO_HOME}" \
     && chown ${RUN_USER}:${RUN_GROUP}   "${BAMBOO_HOME}" \

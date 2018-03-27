@@ -18,7 +18,7 @@ ENV RUN_GROUP           daemon
 
 # Install Atlassian Bitbucket Server to the following location
 RUN set -x \
-    && apk add --update ca-certificates bash curl git git-daemon openssh openssl procps perl tar tini ttf-dejavu \
+    && apk add --update ca-certificates bash curl git git-daemon openssh openssl procps perl tar tini tomcat-native ttf-dejavu \
     && rm -rf /var/lib/{apt,dpkg,cache,log}/ /tmp/* /var/tmp/* \
     && mkdir -p                         "${BITBUCKET_HOME}" \
     && chmod -R 700                     "${BITBUCKET_HOME}" \

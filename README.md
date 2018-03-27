@@ -8,7 +8,8 @@ Java: Oracle JDK 1.8
 ## Bitbucket
 
 Version: 5.9.0
-Java: Oracle JDK 1.8
+Java: OpenJDK 8 (Alpine)
+Update: 2018-03-27
 
 ## Confluence
 

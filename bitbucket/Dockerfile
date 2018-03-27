@@ -1,4 +1,4 @@
-FROM tommylau/java:1.8
+FROM openjdk:8-jdk-alpine
 
 MAINTAINER Tommy Lau <tommy@gen-new.com>
 
@@ -18,26 +18,18 @@ ENV RUN_GROUP           daemon
 
 # Install Atlassian Bitbucket Server to the following location
 RUN set -x \
-    && apt-get update -qq \
-    && apt-get install -y --no-install-recommends git \
-    && apt-get clean autoclean \
-    && apt-get autoremove --yes \
-    && rm -rf /var/lib/{apt,dpkg,cache,log}/ \
+    && apk add --update ca-certificates bash curl git git-daemon openssh openssl procps perl tar tini ttf-dejavu \
+    && rm -rf /var/lib/{apt,dpkg,cache,log}/ /tmp/* /var/tmp/* \
     && mkdir -p                         "${BITBUCKET_HOME}" \
     && chmod -R 700                     "${BITBUCKET_HOME}" \
     && chown ${RUN_USER}:${RUN_GROUP}   "${BITBUCKET_HOME}" \
-    && mkdir -p                         "${BITBUCKET_INSTALL}/conf" \
+    && mkdir -p                         "${BITBUCKET_INSTALL}" \
     && curl -Ls                         "${DOWNLOAD_URL}" | tar -xz --strip=1 -C "$BITBUCKET_INSTALL" \
-    && chmod -R 700                     "${BITBUCKET_INSTALL}/conf" \
-    && chmod -R 700                     "${BITBUCKET_INSTALL}/logs" \
-    && chmod -R 700                     "${BITBUCKET_INSTALL}/temp" \
-    && chmod -R 700                     "${BITBUCKET_INSTALL}/work" \
-    && cd ${BITBUCKET_INSTALL}/atlassian-bitbucket/WEB-INF/lib \
+    && cd ${BITBUCKET_INSTALL}/app/WEB-INF/lib \
     && curl -SLO "https://gist.github.com/TommyLau/8a5ce4629d027f7884e6/raw/7ae5d32c6f77a39746597d46a511768e5a401b47/atlassian-extras-decoder-v2-3.3.0.jar" \
     && cd ../atlassian-bundled-plugins/ \
     && curl -SLO "https://gist.github.com/TommyLau/8a5ce4629d027f7884e6/raw/7e4daacc1aabc4ff5a1a46112a4d273434951118/atlassian-universal-plugin-manager-plugin-2.22.6.jar" \
-    && chown -R ${RUN_USER}:${RUN_GROUP} ${BITBUCKET_INSTALL} \
-    && ln -s "/usr/lib/x86_64-linux-gnu/libtcnative-1.so" "${BITBUCKET_INSTALL}/lib/native/libtcnative-1.so"
+    && chown -R ${RUN_USER}:${RUN_GROUP} ${BITBUCKET_INSTALL}
 
 # Use the default unprivileged account. This could be considered bad practice
 # on systems where multiple processes end up being executed by 'daemon' but

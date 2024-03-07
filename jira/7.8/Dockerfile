@@ -29,9 +29,9 @@ RUN set -x \
     && chmod -R 700                     "${JIRA_INSTALL}/temp" \
     && chmod -R 700                     "${JIRA_INSTALL}/work" \
     && cd ${JIRA_INSTALL}/atlassian-jira/WEB-INF/lib \
-    && curl -SLO "https://gist.githubusercontent.com/TommyLau/8a5ce4629d027f7884e6/raw/atlassian-extras-3.4.6.jar" \
+    && curl -SLO "https://gist.github.com/TommyLau/8a5ce4629d027f7884e6/raw/113a6eca7f68b00628b0f714bbfe8aa34f5f8ba3/atlassian-extras-3.2.jar" \
     && cd ../atlassian-bundled-plugins/                                         \
-    && curl -SLO "https://gist.githubusercontent.com/TommyLau/8a5ce4629d027f7884e6/raw/atlassian-universal-plugin-manager-plugin-6.3.4.jar" \
+    && curl -SLO "https://gist.github.com/TommyLau/8a5ce4629d027f7884e6/raw/279a252ba70e190b10ae914b05ba2c5a1dcaf6e3/atlassian-universal-plugin-manager-plugin-2.22.4.jar" \
     && chown -R ${RUN_USER}:${RUN_GROUP} ${JIRA_INSTALL}
 
 # Use the default unprivileged account. This could be considered bad practice

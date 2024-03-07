@@ -28,7 +28,9 @@ Update: 2018-03-27
 Version: 4.3.1
 Java: Oracle JDK 1.8
 
-## JIRA Software
+## JIRA Data Center
 
-Version: 7.8.0
+Version: 9.12.5
 Java: Oracle JDK 1.8
+Update: 2024-03-07
+

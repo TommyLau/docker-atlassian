@@ -1,11 +1,11 @@
 FROM tommylau/java:1.8
 
-MAINTAINER Tommy Lau <tommy@gen-new.com>
+MAINTAINER Tommy Lau <tommy.lhg@gmail.com>
 
 # Setup useful environment variables
 ENV JIRA_HOME		/var/atlassian/application-data/jira
 ENV JIRA_INSTALL	/opt/atlassian/jira
-ENV JIRA_VERSION	7.8.0
+ENV JIRA_VERSION	9.12.8
 ENV DOWNLOAD_URL	https://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-software-${JIRA_VERSION}.tar.gz
 
 LABEL Description="This image is used to start Atlassian JIRA" Vendor="Tommy Lau" Version="${JIRA_VERSION}"
@@ -29,9 +29,7 @@ RUN set -x \
     && chmod -R 700                     "${JIRA_INSTALL}/temp" \
     && chmod -R 700                     "${JIRA_INSTALL}/work" \
     && cd ${JIRA_INSTALL}/atlassian-jira/WEB-INF/lib \
-    && curl -SLO "https://gist.githubusercontent.com/TommyLau/8a5ce4629d027f7884e6/raw/atlassian-extras-3.4.6.jar" \
-    && cd ../atlassian-bundled-plugins/                                         \
-    && curl -SLO "https://gist.githubusercontent.com/TommyLau/8a5ce4629d027f7884e6/raw/atlassian-universal-plugin-manager-plugin-6.3.4.jar" \
+    && curl -SLO "https://gist.githubusercontent.com/TommyLau/8a5ce4629d027f7884e6/raw/atlassian-extras-key-manager-3.4.6.jar" \
     && chown -R ${RUN_USER}:${RUN_GROUP} ${JIRA_INSTALL}
 
 # Use the default unprivileged account. This could be considered bad practice

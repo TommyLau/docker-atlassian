@@ -2,26 +2,23 @@
 
 ## Bamboo
 
-Version: 6.4.1
-Java: OpenJDK 8 (Alpine)
-Update: 2018-03-27
+Version: 9.6 LTS
+Update: 2024-05-17
 
 ## Bitbucket
 
-Version: 5.9.0
-Java: OpenJDK 8 (Alpine)
-Update: 2018-03-27
+Version: 8.19 LTS
+Update: 2024-05-17
 
 ## Confluence
 
-Version: 6.8.0
-Java: Oracle JDK 1.8
+Version: 8.5 LTS
+Update: 2024-05-17
 
 ## Crowd
 
-Version: 3.1.2
-Java: OpenJDK 8 (Alpine)
-Update: 2018-03-27
+Version: 5.3
+Update: 2024-05-17
 
 ## FishEye / Crucible
 
@@ -30,7 +27,6 @@ Java: Oracle JDK 1.8
 
 ## JIRA Data Center
 
-Version: 9.12.5
-Java: Oracle JDK 1.8
-Update: 2024-03-07
+Version: 9.12 LTS
+Update: 2024-05-17
 

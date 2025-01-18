@@ -7,8 +7,8 @@ Update: 2024-05-17
 
 ## Bitbucket
 
-Version: 8.19 LTS
-Update: 2024-05-17
+Version: 9.2 LTS
+Update: 2025-01-18
 
 ## Confluence
 

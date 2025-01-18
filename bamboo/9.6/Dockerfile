@@ -1,6 +1,6 @@
-FROM atlassian/bamboo:10.2
+FROM atlassian/bamboo:9.6
 
-LABEL maintainer="Tommy Lau <tommy.lhg@gmail.com>"
+MAINTAINER Tommy Lau <tommy.lhg@gmail.com>
 
 RUN set -x \
     && cd ${BAMBOO_INSTALL_DIR}/atlassian-bamboo/WEB-INF/lib \

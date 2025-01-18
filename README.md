@@ -2,8 +2,8 @@
 
 ## Bamboo
 
-Version: 9.6 LTS
-Update: 2024-05-17
+Version: 10.2 LTS
+Update: 2025-01-18
 
 ## Bitbucket
 

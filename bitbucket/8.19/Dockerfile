@@ -1,6 +1,6 @@
-FROM atlassian/bitbucket:9.4
+FROM atlassian/bitbucket:8.19
 
-LABEL maintainer="Tommy Lau <tommy.lhg@gmail.com>"
+MAINTAINER Tommy Lau <tommy.lhg@gmail.com>
 
 RUN set -x \
     && cd ${BITBUCKET_INSTALL_DIR}/app/WEB-INF/lib \

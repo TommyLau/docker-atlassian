@@ -7,13 +7,13 @@ Update: 2024-05-17
 
 ## Bitbucket
 
-Version: 9.2 LTS
+Version: 9.4 LTS
 Update: 2025-01-18
 
 ## Confluence
 
-Version: 8.5 LTS
-Update: 2024-05-17
+Version: 9.2 LTS
+Update: 2025-01-18
 
 ## Crowd
 

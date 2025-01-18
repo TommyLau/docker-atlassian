@@ -1,6 +1,6 @@
-FROM atlassian/jira-software:10.3
+FROM atlassian/jira-software:9.12
 
-LABEL maintainer="Tommy Lau <tommy.lhg@gmail.com>"
+MAINTAINER Tommy Lau <tommy.lhg@gmail.com>
 
 RUN set -x \
     && cd ${JIRA_INSTALL_DIR}/atlassian-jira/WEB-INF/lib \

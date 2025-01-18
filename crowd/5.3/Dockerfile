@@ -1,6 +1,6 @@
-FROM atlassian/crowd:6.2
+FROM atlassian/crowd:5.3
 
-LABEL maintainer="Tommy Lau <tommy.lhg@gmail.com>"
+MAINTAINER Tommy Lau <tommy.lhg@gmail.com>
 
 RUN set -x \
     && cd ${CROWD_INSTALL_DIR}/crowd-webapp/WEB-INF/lib \

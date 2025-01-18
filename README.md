@@ -17,8 +17,8 @@ Update: 2024-05-17
 
 ## Crowd
 
-Version: 5.3
-Update: 2024-05-17
+Version: 6.2
+Update: 2025-01-18
 
 ## FishEye / Crucible
 

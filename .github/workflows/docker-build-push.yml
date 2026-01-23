@@ -56,6 +56,7 @@ jobs:
   build-and-push:
     needs: detect-changes
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     strategy:
       matrix:
         product: ${{ fromJson(needs.detect-changes.outputs.products) }}
@@ -78,11 +79,13 @@ jobs:
         run: |
           DOCKERFILE_PATH="${{ matrix.product }}/Dockerfile"
           
-          # Try to extract version from FROM line (e.g., FROM atlassian/bamboo:12.1.0)
-          VERSION=$(grep -E "^FROM.*:" "$DOCKERFILE_PATH" | sed -E 's/.*:([0-9]+\.[0-9]+\.[0-9]+).*/\1/' | head -1)
+          # Extract version from FROM line (e.g., FROM atlassian/bamboo:12.1.0 or FROM atlassian/jira-software:11.3.1)
+          # Match the version tag after the last colon in the FROM line
+          VERSION=$(grep -E "^FROM" "$DOCKERFILE_PATH" | sed -E 's/^FROM[^:]*:([0-9]+\.[0-9]+\.[0-9]+).*/\1/' | head -1)
           
           if [ -z "$VERSION" ]; then
             echo "Error: Could not extract version from $DOCKERFILE_PATH"
+            echo "FROM line: $(grep '^FROM' "$DOCKERFILE_PATH")"
             exit 1
           fi
           
@@ -104,5 +107,3 @@ jobs:
           tags: |
             tommylau/${{ matrix.product }}:${{ steps.extract_version.outputs.version }}
             tommylau/${{ matrix.product }}:${{ steps.extract_version.outputs.major_minor }}
-          cache-from: type=registry,ref=tommylau/${{ matrix.product }}:buildcache
-          cache-to: type=registry,ref=tommylau/${{ matrix.product }}:buildcache,mode=max

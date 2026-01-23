@@ -1,0 +1,108 @@
+name: Build and Push Docker Images
+
+on:
+  push:
+    branches:
+      - main
+      - master
+    paths:
+      - 'bamboo/Dockerfile'
+      - 'bitbucket/Dockerfile'
+      - 'confluence/Dockerfile'
+      - 'crowd/Dockerfile'
+      - 'jira/Dockerfile'
+  workflow_dispatch:
+
+jobs:
+  detect-changes:
+    runs-on: ubuntu-latest
+    outputs:
+      products: ${{ steps.changes.outputs.products }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Detect changed products
+        id: changes
+        run: |
+          CHANGED_PRODUCTS=""
+          
+          # Check if we can compare with previous commit
+          if git rev-parse --verify HEAD~1 > /dev/null 2>&1; then
+            # Check which Dockerfiles changed
+            for product in bamboo bitbucket confluence crowd jira; do
+              if git diff --name-only HEAD~1 HEAD | grep -q "^${product}/Dockerfile$"; then
+                if [ -z "$CHANGED_PRODUCTS" ]; then
+                  CHANGED_PRODUCTS="$product"
+                else
+                  CHANGED_PRODUCTS="$CHANGED_PRODUCTS $product"
+                fi
+              fi
+            done
+          fi
+          
+          # If no changes detected (e.g., manual trigger or first commit), build all products
+          if [ -z "$CHANGED_PRODUCTS" ]; then
+            CHANGED_PRODUCTS="bamboo bitbucket confluence crowd jira"
+          fi
+          
+          # Convert to JSON array format
+          PRODUCTS_JSON=$(echo "$CHANGED_PRODUCTS" | jq -R -s -c 'split(" ") | map(select(length > 0))')
+          echo "products=$PRODUCTS_JSON" >> $GITHUB_OUTPUT
+          echo "Changed products: $CHANGED_PRODUCTS"
+
+  build-and-push:
+    needs: detect-changes
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        product: ${{ fromJson(needs.detect-changes.outputs.products) }}
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_TOKEN }}
+
+      - name: Extract version from Dockerfile
+        id: extract_version
+        run: |
+          DOCKERFILE_PATH="${{ matrix.product }}/Dockerfile"
+          
+          # Try to extract version from FROM line (e.g., FROM atlassian/bamboo:12.1.0)
+          VERSION=$(grep -E "^FROM.*:" "$DOCKERFILE_PATH" | sed -E 's/.*:([0-9]+\.[0-9]+\.[0-9]+).*/\1/' | head -1)
+          
+          if [ -z "$VERSION" ]; then
+            echo "Error: Could not extract version from $DOCKERFILE_PATH"
+            exit 1
+          fi
+          
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          
+          # Extract major.minor version (e.g., 12.1.0 -> 12.1)
+          MAJOR_MINOR=$(echo "$VERSION" | sed -E 's/^([0-9]+\.[0-9]+)\.[0-9]+/\1/')
+          echo "major_minor=$MAJOR_MINOR" >> $GITHUB_OUTPUT
+          
+          echo "Extracted version: $VERSION"
+          echo "Major.minor version: $MAJOR_MINOR"
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./${{ matrix.product }}
+          file: ./${{ matrix.product }}/Dockerfile
+          push: true
+          tags: |
+            tommylau/${{ matrix.product }}:${{ steps.extract_version.outputs.version }}
+            tommylau/${{ matrix.product }}:${{ steps.extract_version.outputs.major_minor }}
+          cache-from: type=registry,ref=tommylau/${{ matrix.product }}:buildcache
+          cache-to: type=registry,ref=tommylau/${{ matrix.product }}:buildcache,mode=max

@@ -1,32 +1,31 @@
 # Atlassian Docker Images
 
-## Bamboo
+## Crowd
 
-Version: 10.2 LTS
-Update: 2025-01-18
-
-## Bitbucket
-
-Version: 9.4 LTS
-Update: 2025-01-18
+Version: 7.1.3
+Update: 2026-01-24
 
 ## Confluence
 
-Version: 9.2 LTS
-Update: 2025-01-18
+Version: 10.2.2 LTS
+Update: 2026-01-24
 
-## Crowd
+## JIRA Data Center
 
-Version: 6.2
-Update: 2025-01-18
+Version: 11.3.1 LTS
+Update: 2026-01-24
+
+## Bitbucket
+
+Version: 9.4.16 LTS
+Update: 2026-01-24
+
+## Bamboo
+
+Version: 12.1.0 LTS
+Update: 2026-01-24
 
 ## FishEye / Crucible
 
 Version: 4.3.1
 Java: Oracle JDK 1.8
-
-## JIRA Data Center
-
-Version: 10.3 LTS
-Update: 2025-01-18
-

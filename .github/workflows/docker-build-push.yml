@@ -56,7 +56,6 @@ jobs:
   build-and-push:
     needs: detect-changes
     runs-on: ubuntu-latest
-    timeout-minutes: 30
     strategy:
       matrix:
         product: ${{ fromJson(needs.detect-changes.outputs.products) }}
@@ -77,15 +76,20 @@ jobs:
       - name: Extract version from Dockerfile
         id: extract_version
         run: |
-          DOCKERFILE_PATH="${{ matrix.product }}/Dockerfile"
+          PRODUCT="${{ matrix.product }}"
+          DOCKERFILE_PATH="${PRODUCT}/Dockerfile"
+          
+          echo "Product: ${PRODUCT}"
+          echo "Dockerfile path: ${DOCKERFILE_PATH}"
+          ls -la "${DOCKERFILE_PATH}" || echo "File not found at: ${DOCKERFILE_PATH}"
           
           # Extract version from FROM line (e.g., FROM atlassian/bamboo:12.1.0 or FROM atlassian/jira-software:11.3.1)
           # Match the version tag after the last colon in the FROM line
-          VERSION=$(grep -E "^FROM" "$DOCKERFILE_PATH" | sed -E 's/^FROM[^:]*:([0-9]+\.[0-9]+\.[0-9]+).*/\1/' | head -1)
+          VERSION=$(grep -E "^FROM" "${DOCKERFILE_PATH}" | sed -E 's/^FROM[^:]*:([0-9]+\.[0-9]+\.[0-9]+).*/\1/' | head -1)
           
           if [ -z "$VERSION" ]; then
-            echo "Error: Could not extract version from $DOCKERFILE_PATH"
-            echo "FROM line: $(grep '^FROM' "$DOCKERFILE_PATH")"
+            echo "Error: Could not extract version from ${DOCKERFILE_PATH}"
+            echo "FROM line: $(grep '^FROM' "${DOCKERFILE_PATH}")"
             exit 1
           fi
           

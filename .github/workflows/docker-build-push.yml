@@ -56,6 +56,7 @@ jobs:
   build-and-push:
     needs: detect-changes
     runs-on: ubuntu-latest
+    timeout-minutes: 60
     strategy:
       matrix:
         product: ${{ fromJson(needs.detect-changes.outputs.products) }}
@@ -108,6 +109,8 @@ jobs:
           context: ./${{ matrix.product }}
           file: ./${{ matrix.product }}/Dockerfile
           push: true
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
           tags: |
             tommylau/${{ matrix.product }}:${{ steps.extract_version.outputs.version }}
             tommylau/${{ matrix.product }}:${{ steps.extract_version.outputs.major_minor }}

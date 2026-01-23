@@ -33,11 +33,13 @@ jobs:
           if git rev-parse --verify HEAD~1 > /dev/null 2>&1; then
             # Check which Dockerfiles changed
             for product in bamboo bitbucket confluence crowd jira; do
-              if git diff --name-only HEAD~1 HEAD | grep -q "^${product}/Dockerfile$"; then
+              # Clean the product name (remove any whitespace/newlines)
+              CLEAN_PRODUCT=$(echo "$product" | tr -d '\n\r' | xargs)
+              if git diff --name-only HEAD~1 HEAD | grep -q "^${CLEAN_PRODUCT}/Dockerfile$"; then
                 if [ -z "$CHANGED_PRODUCTS" ]; then
-                  CHANGED_PRODUCTS="$product"
+                  CHANGED_PRODUCTS="$CLEAN_PRODUCT"
                 else
-                  CHANGED_PRODUCTS="$CHANGED_PRODUCTS $product"
+                  CHANGED_PRODUCTS="$CHANGED_PRODUCTS $CLEAN_PRODUCT"
                 fi
               fi
             done
@@ -48,16 +50,19 @@ jobs:
             CHANGED_PRODUCTS="bamboo bitbucket confluence crowd jira"
           fi
           
-          # Convert to JSON array format
-          PRODUCTS_JSON=$(echo "$CHANGED_PRODUCTS" | jq -R -s -c 'split(" ") | map(select(length > 0))')
+          # Clean the entire string and convert to JSON array format
+          CLEANED_PRODUCTS=$(echo "$CHANGED_PRODUCTS" | tr -d '\n\r' | xargs)
+          # Split by space, filter empty strings, and create JSON array
+          PRODUCTS_JSON=$(echo "$CLEANED_PRODUCTS" | jq -R -c 'split(" ") | map(select(length > 0))')
           echo "products=$PRODUCTS_JSON" >> $GITHUB_OUTPUT
-          echo "Changed products: $CHANGED_PRODUCTS"
+          echo "Changed products: $CLEANED_PRODUCTS"
 
   build-and-push:
     needs: detect-changes
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 90
     strategy:
+      max-parallel: 1
       matrix:
         product: ${{ fromJson(needs.detect-changes.outputs.products) }}
     
@@ -74,10 +79,17 @@ jobs:
           username: ${{ secrets.DOCKER_HUB_USERNAME }}
           password: ${{ secrets.DOCKER_HUB_TOKEN }}
 
+      - name: Clean product name
+        id: clean_product
+        run: |
+          CLEAN_PRODUCT=$(echo "${{ matrix.product }}" | tr -d '\n\r' | xargs)
+          echo "product=${CLEAN_PRODUCT}" >> $GITHUB_OUTPUT
+          echo "Cleaned product: '${CLEAN_PRODUCT}'"
+
       - name: Extract version from Dockerfile
         id: extract_version
         run: |
-          PRODUCT=$(echo "${{ matrix.product }}" | tr -d '\n\r' | xargs)
+          PRODUCT="${{ steps.clean_product.outputs.product }}"
           DOCKERFILE_PATH="${PRODUCT}/Dockerfile"
           
           echo "Product: '${PRODUCT}'"
@@ -106,11 +118,11 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
-          context: ./${{ matrix.product }}
-          file: ./${{ matrix.product }}/Dockerfile
+          context: ./${{ steps.clean_product.outputs.product }}
+          file: ./${{ steps.clean_product.outputs.product }}/Dockerfile
           push: true
           cache-from: type=gha
           cache-to: type=gha,mode=max
           tags: |
-            tommylau/${{ matrix.product }}:${{ steps.extract_version.outputs.version }}
-            tommylau/${{ matrix.product }}:${{ steps.extract_version.outputs.major_minor }}
+            tommylau/${{ steps.clean_product.outputs.product }}:${{ steps.extract_version.outputs.version }}
+            tommylau/${{ steps.clean_product.outputs.product }}:${{ steps.extract_version.outputs.major_minor }}

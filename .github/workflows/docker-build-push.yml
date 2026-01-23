@@ -76,11 +76,11 @@ jobs:
       - name: Extract version from Dockerfile
         id: extract_version
         run: |
-          PRODUCT="${{ matrix.product }}"
+          PRODUCT=$(echo "${{ matrix.product }}" | tr -d '\n\r' | xargs)
           DOCKERFILE_PATH="${PRODUCT}/Dockerfile"
           
-          echo "Product: ${PRODUCT}"
-          echo "Dockerfile path: ${DOCKERFILE_PATH}"
+          echo "Product: '${PRODUCT}'"
+          echo "Dockerfile path: '${DOCKERFILE_PATH}'"
           ls -la "${DOCKERFILE_PATH}" || echo "File not found at: ${DOCKERFILE_PATH}"
           
           # Extract version from FROM line (e.g., FROM atlassian/bamboo:12.1.0 or FROM atlassian/jira-software:11.3.1)

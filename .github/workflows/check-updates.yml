@@ -29,30 +29,46 @@ jobs:
         run: |
           python3 check-versions.py --update 2>&1 | tee update-log.txt
           
-          # Check if any files changed
-          if git diff --quiet; then
-            echo "has_updates=false" >> $GITHUB_OUTPUT
+          # Check if Dockerfiles changed
+          if git diff --quiet -- '*/Dockerfile'; then
+            echo "has_dockerfile_updates=false" >> $GITHUB_OUTPUT
           else
-            echo "has_updates=true" >> $GITHUB_OUTPUT
-            # Get list of updated products
-            UPDATED=$(git diff --name-only | grep Dockerfile | sed 's|/Dockerfile||' | tr '\n' ' ' | xargs)
+            echo "has_dockerfile_updates=true" >> $GITHUB_OUTPUT
+            UPDATED=$(git diff --name-only -- '*/Dockerfile' | sed 's|/Dockerfile||' | tr '\n' ' ' | xargs)
             echo "updated_products=${UPDATED}" >> $GITHUB_OUTPUT
           fi
+          
+          # Check if cache changed
+          if git diff --quiet -- 'lts-cache.json'; then
+            echo "cache_updated=false" >> $GITHUB_OUTPUT
+          else
+            echo "cache_updated=true" >> $GITHUB_OUTPUT
+          fi
 
-      - name: Commit and push updates
-        if: steps.check.outputs.has_updates == 'true'
+      - name: Commit Dockerfile updates
+        if: steps.check.outputs.has_dockerfile_updates == 'true'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           
           UPDATED="${{ steps.check.outputs.updated_products }}"
           
-          git add -A
+          git add '*/Dockerfile' lts-cache.json
           git commit -m "🔄 Auto-update: ${UPDATED}" -m "$(cat update-log.txt | grep -E '(📝|🔄|✅)' | head -20)"
           git push
 
+      - name: Commit cache updates only
+        if: steps.check.outputs.has_dockerfile_updates == 'false' && steps.check.outputs.cache_updated == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          
+          git add lts-cache.json
+          git commit -m "📋 Update LTS cache"
+          git push
+
       - name: Trigger Docker build workflow
-        if: steps.check.outputs.has_updates == 'true'
+        if: steps.check.outputs.has_dockerfile_updates == 'true'
         uses: actions/github-script@v7
         with:
           script: |
@@ -66,12 +82,19 @@ jobs:
 
       - name: Summary
         run: |
-          if [ "${{ steps.check.outputs.has_updates }}" == "true" ]; then
-            echo "## ✅ Updates Applied" >> $GITHUB_STEP_SUMMARY
-            echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## 📊 Check Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          if [ "${{ steps.check.outputs.has_dockerfile_updates }}" == "true" ]; then
+            echo "### ✅ Updates Applied" >> $GITHUB_STEP_SUMMARY
             echo "Updated: ${{ steps.check.outputs.updated_products }}" >> $GITHUB_STEP_SUMMARY
             echo "" >> $GITHUB_STEP_SUMMARY
             echo "🚀 Triggered docker-build-push workflow" >> $GITHUB_STEP_SUMMARY
           else
-            echo "## ✅ All products up to date" >> $GITHUB_STEP_SUMMARY
+            echo "### ✅ All products up to date" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          if [ "${{ steps.check.outputs.cache_updated }}" == "true" ]; then
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "📋 LTS cache updated" >> $GITHUB_STEP_SUMMARY
           fi

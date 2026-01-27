@@ -1,0 +1,15 @@
+{
+  "lts": {
+    "bamboo:12.1": true,
+    "bitbucket:9.4": true,
+    "confluence:10.2": true,
+    "jira:11.3": true
+  },
+  "not_lts": {
+    "bitbucket:10.0": true,
+    "bitbucket:10.1": true,
+    "bitbucket:9.5": true,
+    "bitbucket:9.6": true
+  },
+  "updated": "2026-01-27 17:29:19"
+}

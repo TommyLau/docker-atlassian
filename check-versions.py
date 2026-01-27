@@ -15,6 +15,7 @@ import json
 import re
 import shutil
 import sys
+from datetime import datetime
 from pathlib import Path
 from typing import Optional
 import urllib.request
@@ -49,9 +50,23 @@ PRODUCTS = {
 }
 
 REPO_ROOT = Path(__file__).parent
+CACHE_FILE = REPO_ROOT / "lts-cache.json"
 
-# Cache for LTS check results
-_lts_cache: dict[str, bool] = {}
+
+def load_cache() -> dict:
+    """Load LTS cache from file."""
+    if CACHE_FILE.exists():
+        try:
+            return json.loads(CACHE_FILE.read_text())
+        except (json.JSONDecodeError, IOError):
+            pass
+    return {"lts": {}, "not_lts": {}, "updated": None}
+
+
+def save_cache(cache: dict) -> None:
+    """Save LTS cache to file."""
+    cache["updated"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    CACHE_FILE.write_text(json.dumps(cache, indent=2, sort_keys=True))
 
 
 def fetch_url(url: str, timeout: int = 15) -> Optional[str]:
@@ -64,12 +79,17 @@ def fetch_url(url: str, timeout: int = 15) -> Optional[str]:
         return None
 
 
-def is_lts_version(product: str, branch: str, config: dict) -> bool:
-    """Check if a version branch is LTS by checking release notes."""
+def is_lts_version(product: str, branch: str, config: dict, cache: dict) -> bool:
+    """Check if a version branch is LTS. Uses cache first, then release notes."""
     cache_key = f"{product}:{branch}"
-    if cache_key in _lts_cache:
-        return _lts_cache[cache_key]
     
+    # Check cache first
+    if cache_key in cache.get("lts", {}):
+        return True
+    if cache_key in cache.get("not_lts", {}):
+        return False
+    
+    # Not in cache - fetch from release notes
     pattern = config.get("release_notes_pattern")
     if not pattern:
         return False
@@ -78,7 +98,10 @@ def is_lts_version(product: str, branch: str, config: dict) -> bool:
     content = fetch_url(url)
     
     if content is None:
-        _lts_cache[cache_key] = False
+        # Page doesn't exist - not LTS
+        if "not_lts" not in cache:
+            cache["not_lts"] = {}
+        cache["not_lts"][cache_key] = True
         return False
     
     # Check for LTS indicators in the page
@@ -89,7 +112,16 @@ def is_lts_version(product: str, branch: str, config: dict) -> bool:
         "is a lts",
     ])
     
-    _lts_cache[cache_key] = is_lts
+    # Update cache
+    if is_lts:
+        if "lts" not in cache:
+            cache["lts"] = {}
+        cache["lts"][cache_key] = True
+    else:
+        if "not_lts" not in cache:
+            cache["not_lts"] = {}
+        cache["not_lts"][cache_key] = True
+    
     return is_lts
 
 
@@ -174,8 +206,8 @@ def get_latest_in_branch(versions: list[tuple[tuple[int, int, int], str]], branc
     return branch_versions[0][1]
 
 
-def find_latest_lts(product: str, config: dict, versions: list[tuple[tuple[int, int, int], str]]) -> tuple[Optional[str], Optional[str]]:
-    """Find the latest LTS version by checking release notes. Returns (version, branch)."""
+def find_latest_lts(product: str, config: dict, versions: list[tuple[tuple[int, int, int], str]], cache: dict) -> tuple[Optional[str], Optional[str]]:
+    """Find the latest LTS version. Returns (version, branch)."""
     branches = get_unique_branches(versions)
     
     # Check branches from newest to oldest
@@ -185,13 +217,16 @@ def find_latest_lts(product: str, config: dict, versions: list[tuple[tuple[int, 
         if checked >= 5:
             break
         
+        cache_key = f"{product}:{branch}"
+        is_cached = cache_key in cache.get("lts", {}) or cache_key in cache.get("not_lts", {})
+        
         print(f"    Checking {branch}...", end=" ", flush=True)
-        if is_lts_version(product, branch, config):
-            print("LTS ✓")
+        if is_lts_version(product, branch, config, cache):
+            print("LTS ✓" + (" (cached)" if is_cached else ""))
             latest = get_latest_in_branch(versions, branch)
             return (latest, branch)
         else:
-            print("not LTS")
+            print("not LTS" + (" (cached)" if is_cached else ""))
         checked += 1
     
     return (None, None)
@@ -269,7 +304,7 @@ def apply_update(result: dict, config: dict) -> bool:
         return False
 
 
-def check_product(product: str, config: dict) -> dict:
+def check_product(product: str, config: dict, cache: dict) -> dict:
     """Check a single product for updates."""
     result = {
         "product": product,
@@ -307,7 +342,7 @@ def check_product(product: str, config: dict) -> dict:
     # Get latest version
     if config["lts"]:
         print(f"  Discovering LTS branches...")
-        latest, latest_branch = find_latest_lts(product, config, versions)
+        latest, latest_branch = find_latest_lts(product, config, versions, cache)
         result["latest_branch"] = latest_branch
         if latest:
             print(f"  Latest LTS: {latest} (branch: {latest_branch})")
@@ -344,7 +379,17 @@ def main():
     parser = argparse.ArgumentParser(description="Check and update Atlassian Docker images")
     parser.add_argument("--update", action="store_true", help="Apply available updates")
     parser.add_argument("--product", type=str, help="Only check/update specific product")
+    parser.add_argument("--clear-cache", action="store_true", help="Clear LTS cache before running")
     args = parser.parse_args()
+    
+    # Load or clear cache
+    if args.clear_cache:
+        cache = {"lts": {}, "not_lts": {}, "updated": None}
+        print("🗑️  Cache cleared")
+    else:
+        cache = load_cache()
+        if cache.get("updated"):
+            print(f"📋 Using LTS cache (updated: {cache['updated']})")
     
     print("=" * 60)
     if args.update:
@@ -364,8 +409,11 @@ def main():
     
     results = []
     for product, config in products_to_check.items():
-        result = check_product(product, config)
+        result = check_product(product, config, cache)
         results.append(result)
+    
+    # Save cache
+    save_cache(cache)
     
     # Summary
     print("\n" + "=" * 60)
@@ -375,17 +423,16 @@ def main():
     updates_needed = [r for r in results if r["needs_update"]]
     if not updates_needed:
         print("\n✅ All products are up to date!")
-        return 0
-    
-    print(f"\n📋 {len(updates_needed)} update(s) available:\n")
-    for r in updates_needed:
-        marker = "🔄 MAJOR" if r["major_minor_change"] else "📝 patch"
-        print(f"  {marker} {r['product']}: {r['current']} → {r['latest']}")
-        if r["major_minor_change"]:
-            print(f"         └─ Archive {r['current_branch']}/, update to {r['latest_branch']}")
+    else:
+        print(f"\n📋 {len(updates_needed)} update(s) available:\n")
+        for r in updates_needed:
+            marker = "🔄 MAJOR" if r["major_minor_change"] else "📝 patch"
+            print(f"  {marker} {r['product']}: {r['current']} → {r['latest']}")
+            if r["major_minor_change"]:
+                print(f"         └─ Archive {r['current_branch']}/, update to {r['latest_branch']}")
     
     # Apply updates if --update flag
-    if args.update:
+    if args.update and updates_needed:
         print("\n" + "=" * 60)
         print("APPLYING UPDATES")
         print("=" * 60)
@@ -402,7 +449,7 @@ def main():
         
         if success_count < len(updates_needed):
             return 1
-    else:
+    elif updates_needed:
         print("\nRun with --update to apply these updates.")
     
     print()

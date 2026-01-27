@@ -1,0 +1,60 @@
+name: Check Atlassian Updates
+
+on:
+  schedule:
+    # Run daily at 8:00 AM UTC (4:00 PM Shanghai)
+    - cron: '0 8 * * *'
+  workflow_dispatch:  # Allow manual trigger
+
+jobs:
+  check-and-update:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Check for updates
+        id: check
+        run: |
+          python3 check-versions.py --update 2>&1 | tee update-log.txt
+          
+          # Check if any files changed
+          if git diff --quiet; then
+            echo "has_updates=false" >> $GITHUB_OUTPUT
+          else
+            echo "has_updates=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Commit and push updates
+        if: steps.check.outputs.has_updates == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          
+          # Get list of updated products from git diff
+          UPDATED=$(git diff --name-only | grep Dockerfile | sed 's|/Dockerfile||' | tr '\n' ', ' | sed 's/,$//')
+          
+          # Create commit message
+          git add -A
+          git commit -m "🔄 Auto-update: ${UPDATED}" -m "$(cat update-log.txt | grep -E '(📝|🔄|✅)' | head -20)"
+          git push
+
+      - name: Summary
+        run: |
+          if [ "${{ steps.check.outputs.has_updates }}" == "true" ]; then
+            echo "## ✅ Updates Applied" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            cat update-log.txt | grep -E '(📝|🔄|✅|→)' >> $GITHUB_STEP_SUMMARY
+          else
+            echo "## ✅ All products up to date" >> $GITHUB_STEP_SUMMARY
+          fi

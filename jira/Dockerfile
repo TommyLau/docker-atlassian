@@ -1,4 +1,4 @@
-FROM atlassian/jira-software:11.3.1
+FROM atlassian/jira-software:11.3.2
 
 LABEL maintainer="Tommy Lau <tommy.lhg@gmail.com>"
 

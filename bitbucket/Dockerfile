@@ -1,4 +1,4 @@
-FROM atlassian/bitbucket:9.4.16
+FROM atlassian/bitbucket:9.4.17
 
 LABEL maintainer="Tommy Lau <tommy.lhg@gmail.com>"
 

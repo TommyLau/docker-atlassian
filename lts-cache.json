@@ -3,6 +3,7 @@
     "bamboo:12.1": true,
     "bitbucket:9.4": true,
     "confluence:10.2": true,
+    "jira:10.3": true,
     "jira:11.3": true
   },
   "not_lts": {
@@ -16,5 +17,5 @@
     "jira:10.7": true,
     "jira:11.2": true
   },
-  "updated": "2026-02-28 08:23:47"
+  "updated": "2026-03-01 08:26:15"
 }

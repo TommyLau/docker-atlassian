@@ -10,6 +10,7 @@
     "bitbucket:10.0": true,
     "bitbucket:10.1": true,
     "bitbucket:10.2": true,
+    "bitbucket:10.3": true,
     "bitbucket:9.5": true,
     "bitbucket:9.6": true,
     "jira:10.4": true,
@@ -19,5 +20,5 @@
     "jira:11.1": true,
     "jira:11.2": true
   },
-  "updated": "2026-05-11 10:57:08"
+  "updated": "2026-05-12 10:27:25"
 }

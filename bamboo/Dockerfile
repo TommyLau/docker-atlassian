@@ -1,4 +1,4 @@
-FROM atlassian/bamboo:12.1.7
+FROM atlassian/bamboo:12.1.8
 
 LABEL maintainer="Tommy Lau <tommy.lhg@gmail.com>"
 

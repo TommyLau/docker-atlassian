@@ -1,4 +1,4 @@
-FROM atlassian/crowd:7.2.2
+FROM atlassian/crowd:7.2.3
 
 LABEL maintainer="Tommy Lau <tommy.lhg@gmail.com>"
 

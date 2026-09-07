@@ -1,4 +1,4 @@
-FROM atlassian/confluence:10.2.16
+FROM atlassian/confluence:10.2.17
 
 LABEL maintainer="Tommy Lau <tommy.lhg@gmail.com>"
 

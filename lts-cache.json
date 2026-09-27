@@ -18,8 +18,9 @@
     "jira:10.5": true,
     "jira:10.6": true,
     "jira:10.7": true,
+    "jira:11.0": true,
     "jira:11.1": true,
     "jira:11.2": true
   },
-  "updated": "2026-09-26 12:37:21"
+  "updated": "2026-09-27 13:29:07"
 }

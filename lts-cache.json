@@ -15,6 +15,7 @@
     "bitbucket:10.5": true,
     "bitbucket:9.5": true,
     "bitbucket:9.6": true,
+    "confluence:11.0": true,
     "jira:10.4": true,
     "jira:10.5": true,
     "jira:10.6": true,
@@ -23,5 +24,5 @@
     "jira:11.1": true,
     "jira:11.2": true
   },
-  "updated": "2026-10-08 15:08:45"
+  "updated": "2026-10-09 14:54:15"
 }
